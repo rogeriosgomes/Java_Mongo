@@ -50,4 +50,16 @@ public class ArtigoController {
         return this.artigoService.findByDataAndStatus(data, status);
     }
 
+    @PutMapping
+    public void atualizar(@RequestBody Artigo artigo){
+        this.artigoService.atualizar(artigo);
+    }
+
+    @PutMapping("/{id}")
+    public void atualizarUrl(@PathVariable String id, @RequestBody String novaUrl){
+
+        this.atualizarUrl(id, novaUrl);
+
+    }
+
 }
