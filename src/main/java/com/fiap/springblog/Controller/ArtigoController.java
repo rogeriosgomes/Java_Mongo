@@ -5,6 +5,7 @@ import com.fiap.springblog.model.Artigo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -36,6 +37,17 @@ public class ArtigoController {
     @DeleteMapping("/{codigo}")
     public void remover(@PathVariable String codigo){
         this.artigoService.remover(codigo);
+    }
+
+    @GetMapping("/maiordata")
+    public List<Artigo> findByDataGreaterThan(@RequestParam("data")LocalDateTime data){
+        return this.artigoService.findByDataGreaterThan(data);
+    }
+
+    @GetMapping("/data-status")
+    public List<Artigo> findByDataAndStatus(@RequestParam("data")LocalDateTime data,
+                                            @RequestParam("status") int status){
+        return this.artigoService.findByDataAndStatus(data, status);
     }
 
 }
