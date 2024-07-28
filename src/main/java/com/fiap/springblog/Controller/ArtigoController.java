@@ -2,7 +2,12 @@ package com.fiap.springblog.Controller;
 
 import com.fiap.springblog.Service.ArtigoService;
 import com.fiap.springblog.model.Artigo;
+import com.fiap.springblog.model.ArtigoStatusCount;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -60,6 +65,48 @@ public class ArtigoController {
 
         this.atualizarUrl(id, novaUrl);
 
+    }
+
+    @GetMapping("/status-maiordata")
+    public List<Artigo> findByStatusAndDataGreaterThan (@RequestParam("status") Integer status,
+                                                        @RequestParam("data") LocalDateTime data){
+        return this.artigoService.findByStatusAndDataGreaterThan(status, data);
+    }
+
+    @GetMapping("/periodo")
+    public List<Artigo> obterArtigoPorDataHora(@RequestParam("de") LocalDateTime de,
+                                               @RequestParam("ate") LocalDateTime ate){
+        return this.artigoService.obterArtigoPorDataHora(de, ate);
+    }
+
+    @GetMapping("/complexos")
+    public List<Artigo> encontrarArtigoComplexos(@RequestParam Integer status,
+                                                 @RequestParam LocalDateTime data,
+                                                 @RequestParam String nome){
+        return  this.artigoService.encontrarArtigoComplexos(status,data,nome);
+    }
+
+    @GetMapping("/pagina-artigos")
+    public ResponseEntity<Page<Artigo>> listaArtigos(Pageable pageable){
+        Page<Artigo> artigos = this.artigoService.listaArtigos(pageable);
+
+        return ResponseEntity.ok(artigos);
+
+    }
+
+    @GetMapping("/ordem")
+    public List<Artigo> findByStatusOrderByNomeAsc(@RequestParam("status") Integer Status){
+        return this.artigoService.findByStatusOrderByNomeAsc(Status);
+    }
+
+    @GetMapping("/pesquisa-texto")
+    public List<Artigo> findByTexto(@RequestParam("searchTerm") String searchTerm){
+        return this.artigoService.findByTexto(searchTerm);
+    }
+
+    @GetMapping("/agregracao")
+    public List<ArtigoStatusCount> contarArtigosPorStatus(Integer status){
+        return this.artigoService.contarArtigosPorStatus(status);
     }
 
 }
